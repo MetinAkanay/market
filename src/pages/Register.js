@@ -6,6 +6,7 @@ import { Formik } from "formik";
 import * as Yup from 'yup';
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
+import bg from "../assets/images/Register-bg.jpg"
 
 const RegisterSchema = Yup.object().shape({
   userName: Yup.string()
@@ -39,7 +40,7 @@ function Register() {
   };
 
   return (
-    <div className='flex justify-center items-center h-screen'>
+    <div className='flex justify-center items-center h-screen' style={{backgroundImage:`url(${bg})`, backgroundPosition:"center", backgroundRepeat: "no-repeat", backgroundSize:"cover"}}>
       <div style={{ minWidth: "300px" }} className='border-gray-300 border-2 p-6 rounded-lg bg-blue-800 bg-opacity-15'>
         <Formik
           initialValues={{ userName: "", email: "", password: "" }}
@@ -88,7 +89,7 @@ function Register() {
               </div>
               <span className='my-3 text-sm'>Already have an account? <Link to={"/login"} className='underline text-blue-400'>Login</Link></span>
               <div className='flex justify-center mt-3'>
-                <Button variant='outlined' type='submit' onClick={handleSubmit} endIcon={<SendIcon />}>Register</Button>
+                <Button variant='outlined' onClick={handleSubmit} endIcon={<SendIcon />}>Register</Button>
               </div>
             </div>
           )}
