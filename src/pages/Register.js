@@ -18,6 +18,10 @@ const RegisterSchema = Yup.object().shape({
     .required("Email is required!"),
   password: Yup.string()
     .required("Password is required")
+    .min(4, "Password is too short!"),
+  passwordConfirm: Yup.string()
+    .oneOf([Yup.ref("password")],"Password not match")
+    .required("PasswordConfirm is required")
     .min(4, "Password is too short!")
 });
 
@@ -27,11 +31,12 @@ function Register() {
   const handleRegister = async (registerObject) => {
     console.log(handleRegister)
     try {
+      delete registerObject["passwordConfirm"]
       let response = await axios.post("http://localhost:9000/user/register", registerObject);
       console.log(response.data);
       if (response.data.message) {
         toast.success(response.data.message);
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error(error.response.data.message);
@@ -43,7 +48,7 @@ function Register() {
     <div className='flex justify-center items-center h-screen' style={{backgroundImage:`url(${bg})`, backgroundPosition:"center", backgroundRepeat: "no-repeat", backgroundSize:"cover"}}>
       <div style={{ minWidth: "300px" }} className='border-gray-300 border-2 p-6 rounded-lg bg-blue-800 bg-opacity-15'>
         <Formik
-          initialValues={{ userName: "", email: "", password: "" }}
+          initialValues={{ userName: "", email: "", password: "" , passwordConfirm: ""}}
           onSubmit={(values) => handleRegister(values)}
           validationSchema={RegisterSchema}
         >
@@ -53,6 +58,7 @@ function Register() {
                 <TextField
                   variant="standard"
                   label="Username"
+                  required
                   fullWidth
                   value={values.userName}
                   onChange={handleChange("userName")}
@@ -66,6 +72,7 @@ function Register() {
                   variant="standard"
                   label="Email"
                   type='email'
+                  required
                   fullWidth
                   value={values.email}
                   onChange={handleChange("email")}
@@ -79,12 +86,27 @@ function Register() {
                   variant="standard"
                   label="Password"
                   type='password'
+                  required
                   fullWidth
                   value={values.password}
                   onChange={handleChange("password")}
                   onBlur={handleBlur("password")}
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
+                />
+              </div>
+              <div className='my-4'>
+                <TextField
+                  variant="standard"
+                  label="Password Confirm"
+                  type='password'
+                  required
+                  fullWidth
+                  value={values.passwordConfirm}
+                  onChange={handleChange("passwordConfirm")}
+                  onBlur={handleBlur("passwordConfirm")}
+                  error={touched.passwordConfirm && Boolean(errors.passwordConfirm)}
+                  helperText={touched.passwordConfirm && errors.passwordConfirm}
                 />
               </div>
               <span className='my-3 text-sm'>Already have an account? <Link to={"/login"} className='underline text-blue-400'>Login</Link></span>
