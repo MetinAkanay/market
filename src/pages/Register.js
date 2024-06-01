@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button, TextField } from "@mui/material";
+import React, { useState } from 'react';
+import { Button, InputAdornment, TextField } from "@mui/material";
 import axios from 'axios';
 import SendIcon from "@mui/icons-material/Send";
 import { Formik } from "formik";
@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import bg from "../assets/images/Register-bg.jpg"
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const RegisterSchema = Yup.object().shape({
   userName: Yup.string()
@@ -27,6 +28,9 @@ const RegisterSchema = Yup.object().shape({
 
 function Register() {
   const navigate = useNavigate();
+
+  const [isShow, setIsShow] = useState(false)
+  const [isShowConfirm, setIsShowConfirm] = useState(false)
 
   const handleRegister = async (registerObject) => {
     console.log(handleRegister)
@@ -85,7 +89,7 @@ function Register() {
                 <TextField
                   variant="standard"
                   label="Password"
-                  type='password'
+                  type={isShow ? "text" : "password"}
                   required
                   fullWidth
                   value={values.password}
@@ -93,13 +97,20 @@ function Register() {
                   onBlur={handleBlur("password")}
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
+                  InputProps={{
+                    endAdornment: <InputAdornment position='end' onClick={() => setIsShow(!isShow)}>
+                      {
+                        isShow ? <VisibilityOff /> : <Visibility />
+                      }
+                    </InputAdornment>
+                  }}
                 />
               </div>
               <div className='my-4'>
                 <TextField
                   variant="standard"
                   label="Password Confirm"
-                  type='password'
+                  type={isShowConfirm ? "text" : "password"}
                   required
                   fullWidth
                   value={values.passwordConfirm}
@@ -107,6 +118,13 @@ function Register() {
                   onBlur={handleBlur("passwordConfirm")}
                   error={touched.passwordConfirm && Boolean(errors.passwordConfirm)}
                   helperText={touched.passwordConfirm && errors.passwordConfirm}
+                  InputProps={{
+                    endAdornment: <InputAdornment position='end' onClick={() => setIsShowConfirm(!isShowConfirm)}>
+                      {
+                        isShowConfirm ? <VisibilityOff /> : <Visibility />
+                      }
+                    </InputAdornment>
+                  }}
                 />
               </div>
               <span className='my-3 text-sm'>Already have an account? <Link to={"/login"} className='underline text-blue-400'>Login</Link></span>
