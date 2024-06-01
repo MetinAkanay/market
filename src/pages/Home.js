@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
+import Navbar from '../components/Navbar'
 
 function Home() {
 
@@ -20,7 +21,9 @@ function Home() {
     }
 
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    <>
+      <Navbar />
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
         {
             data && data.map((product, key) =>(
                 <div key={key} className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -54,7 +57,8 @@ function Home() {
 
             ))
         }
-    </div>
+      </div>
+    </>
   )
 }
 
