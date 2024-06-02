@@ -16,11 +16,23 @@ import { Balance } from '@mui/icons-material';
 import { Icon } from '@mui/material';
 import { Badge } from '@mui/material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { useSelector } from "react-redux"
+import { useNavigate, Link } from 'react-router-dom';
+
 
 const pages = ['Products', 'Blog', 'Cart'];
-const settings = ['Profile','Logout'];
+const settings = ['Profile', 'Logout'];
 
 function Navbar() {
+
+  const navigate = useNavigate()
+
+
+  const { cartNumber } = useSelector(state => state.cart)
+  console.log(cartNumber)
+
+
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -40,15 +52,14 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{backgroundColor: "rgba(250,235,215, 0.8)", marginBottom: "20px"}}>
+    <AppBar position="static" sx={{ backgroundColor: "rgba(250,235,215, 0.8)", marginBottom: "20px" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{color:"black", display: { xs: 'none', md: 'flex' }, mr: 1 }}  />
+          <AdbIcon sx={{ color: "black", display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Link to="/">
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -61,6 +72,7 @@ function Navbar() {
           >
             Phone Shop
           </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -130,9 +142,9 @@ function Navbar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <IconButton sx={{mr: 1}}>
-              <Badge badgeContent={1} color="error">
-              <ShoppingCartOutlinedIcon/>
+            <IconButton sx={{ mr: 1, border: "1px solid gray" }} onClick={() => navigate("/cart")}>
+              <Badge badgeContent={cartNumber} color="error">
+                <ShoppingCartOutlinedIcon />
               </Badge>
             </IconButton>
             <Tooltip title="Open settings">
@@ -140,7 +152,7 @@ function Navbar() {
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
